@@ -1,5 +1,20 @@
 import requests
 import urllib.parse
+import time
+
+"""
+Graphhopper Route Planner Enhancement
+Team: Montemar Squad
+Members:
+- John Ken Ompad - Enhanced UI with Menu System
+- Jomari G. Tero - Favorite Locations
+- Niño Angelo A. Lawan - Simple Route Visualization
+- Lance Montemar - Simple Export Directions
+
+This application uses the Graphhopper API to find routes between locations,
+with enhanced features added by our team.
+"""
+
 
 # Graphhopper API URLs
 geocode_url = "https://graphhopper.com/api/1/geocode?"
@@ -88,3 +103,72 @@ while True:
             print("=================================================")
         else:
             print(f"Routing API Status: {paths_status}\nError message: {paths_data.get('message', 'No route found')}")
+
+
+# Feature 1: Enhanced UI - Clear screen function (John Ken Ompad)
+def clear_screen():
+    """Clear the terminal screen"""
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+# Feature 1: Enhanced UI - Display header (John Ken Ompad)
+def display_header(title="Graphhopper Route Planner"):
+    """Display a header with the given title"""
+    clear_screen()
+    print("=" * 50)
+    print(f"{title:^50}")
+    print("=" * 50)
+
+# Feature 1: Enhanced UI - Main menu function (John Ken Ompad)
+def display_menu():
+    """Display the main menu and get user choice"""
+    display_header()
+    print("\n1. Find route between locations")
+    print("2. Manage favorite locations")
+    print("3. About this application")
+    print("4. Exit")
+    print("\nEnter 'q' or 'quit' at any prompt to return to this menu.")
+    choice = input("\nEnter your choice (1-4): ")
+    return choice
+
+def about():
+    """Display information about the application"""
+    display_header("About This Application")
+    
+    print("\nGraphhopper Route Planner")
+    print("Team: Montemar Squad")
+    print("\nMembers:")
+    print("- John Ken Ompad - Enhanced UI with Menu System")
+    print("- Jomari G. Tero - Favorite Locations")
+    print("- Niño Angelo A. Lawan - Simple Route Visualization")
+    print("- Lance Montemar - Simple Export Directions")
+    
+    print("\nThis application uses the Graphhopper API to find routes between")
+    print("locations with enhanced features added by our team.")
+    
+    input("\nPress Enter to continue...")
+
+def main():
+    """Main application function"""
+    while True:
+        choice = display_menu()
+        
+        if choice == "1":
+            find_route()
+        elif choice == "2":
+            manage_favorites()
+        elif choice == "3":
+            about()
+        elif choice == "4" or choice.lower() in ["q", "quit"]:
+            print("\nThank you for using Graphhopper Route Planner!")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+            time.sleep(1)
+
+# Update the find_route function to use the enhanced UI
+def find_route():
+    """Find a route between two locations"""
+    display_header("Find Route")
+    
+    # Rest of the function remains the same
+    # ...
