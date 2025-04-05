@@ -1,6 +1,7 @@
 import requests
 import urllib.parse
 import time
+import webbrowser
 
 """
 Graphhopper Route Planner Enhancement
@@ -247,6 +248,46 @@ def find_route():
     elif option == "2":
         name = input("Enter name for this favorite: ")
         save_favorite(name, dest)
+    # ... other options ...
+
+# Feature 3: Simple Route Visualization (Niño Angelo A. Lawan)
+def visualize_route(orig, dest):
+    """
+    Open a map in the browser showing the route between two points
+    
+    Parameters:
+    orig -- Origin location data (status, lat, lng, name)
+    dest -- Destination location data (status, lat, lng, name)
+    """
+    # Create a Google Maps URL for the route
+    maps_url = f"https://www.google.com/maps/dir/?api=1&origin={orig[1]},{orig[2]}&destination={dest[1]},{dest[2]}&travelmode=driving"
+    
+    print(f"\nOpening route map in your browser...")
+    webbrowser.open(maps_url)
+    print("If the browser doesn't open automatically, use this URL:")
+    print(maps_url)
+
+# Add to the find_route function
+def find_route():
+    # ... existing code ...
+    
+    # After displaying route, offer options
+    print("\nOptions:")
+    print("1. Save origin to favorites")
+    print("2. Save destination to favorites")
+    print("3. View route on map")
+    print("4. Export directions to file")
+    print("5. Return to main menu")
+    
+    option = input("\nEnter option (1-5): ")
+    if option == "1":
+        name = input("Enter name for this favorite: ")
+        save_favorite(name, orig)
+    elif option == "2":
+        name = input("Enter name for this favorite: ")
+        save_favorite(name, dest)
+    elif option == "3":
+        visualize_route(orig, dest)
     # ... other options ...
 
 # Main application loop
