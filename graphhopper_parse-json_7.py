@@ -290,6 +290,74 @@ def find_route():
         visualize_route(orig, dest)
     # ... other options ...
 
+# Feature 4: Simple Export Directions (Lance Montemar)
+def export_directions(orig, dest, vehicle, paths_data):
+    """
+    Export directions to a simple text file
+    
+    Parameters:
+    orig -- Origin location data
+    dest -- Destination location data
+    vehicle -- Vehicle profile used
+    paths_data -- Route data from Graphhopper API
+    """
+    try:
+        # Create a simple filename
+        filename = f"directions_{orig[3]}_to_{dest[3]}.txt"
+        # Replace characters that might cause issues in filenames
+        filename = filename.replace(" ", "_").replace(",", "").replace("/", "_")
+        
+        with open(filename, "w") as f:
+            f.write("=================================================\n")
+            f.write(f"Directions from {orig[3]} to {dest[3]} by {vehicle}\n")
+            f.write("=================================================\n")
+            
+            miles = (paths_data["paths"][0]["distance"]) / 1000 / 1.61
+            km = (paths_data["paths"][0]["distance"]) / 1000
+            sec = int(paths_data["paths"][0]["time"] / 1000 % 60)
+            min = int(paths_data["paths"][0]["time"] / 1000 / 60 % 60)
+            hr = int(paths_data["paths"][0]["time"] / 1000 / 60 / 60)
+            
+            f.write(f"Distance Traveled: {miles:.1f} miles / {km:.1f} km\n")
+            f.write(f"Trip Duration: {hr:02d}:{min:02d}:{sec:02d}\n")
+            f.write("=================================================\n")
+            
+            for each in range(len(paths_data["paths"][0]["instructions"])):
+                path = paths_data["paths"][0]["instructions"][each]["text"]
+                distance = paths_data["paths"][0]["instructions"][each]["distance"]
+                f.write(f"{path} ({distance / 1000:.1f} km / {distance / 1000 / 1.61:.1f} miles)\n")
+            
+            f.write("=================================================\n")
+        
+        print(f"\nDirections exported to {filename}")
+    except Exception as e:
+        print(f"Error exporting directions: {e}")
+
+# Add to the find_route function
+def find_route():
+    # ... existing code ...
+    
+    # After displaying route, offer options
+    print("\nOptions:")
+    print("1. Save origin to favorites")
+    print("2. Save destination to favorites")
+    print("3. View route on map")
+    print("4. Export directions to file")
+    print("5. Return to main menu")
+    
+    option = input("\nEnter option (1-5): ")
+    if option == "1":
+        name = input("Enter name for this favorite: ")
+        save_favorite(name, orig)
+    elif option == "2":
+        name = input("Enter name for this favorite: ")
+        save_favorite(name, dest)
+    elif option == "3":
+        visualize_route(orig, dest)
+    elif option == "4":
+        export_directions(orig, dest, vehicle, paths_data)
+    # ... other options ...
+
 # Main application loop
 while True:
     print("\n+++++++++++++++++++++++++++++++++++++++++++++")
