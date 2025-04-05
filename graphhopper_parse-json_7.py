@@ -1,8 +1,3 @@
-import requests
-import urllib.parse
-import time
-import webbrowser
-
 """
 Graphhopper Route Planner Enhancement
 Team: Montemar Squad
@@ -15,6 +10,12 @@ Members:
 This application uses the Graphhopper API to find routes between locations,
 with enhanced features added by our team.
 """
+
+import requests
+import urllib.parse
+import os
+import webbrowser
+import time
 
 # Graphhopper API URLs
 geocode_url = "https://graphhopper.com/api/1/geocode?"
@@ -63,61 +64,6 @@ def display_header(title="Graphhopper Route Planner"):
     print("=" * 50)
     print(f"{title:^50}")
     print("=" * 50)
-
-# Feature 1: Enhanced UI - Main menu function (John Ken Ompad)
-def display_menu():
-    """Display the main menu and get user choice"""
-    display_header()
-    print("\n1. Find route between locations")
-    print("2. Manage favorite locations")
-    print("3. About this application")
-    print("4. Exit")
-    print("\nEnter 'q' or 'quit' at any prompt to return to this menu.")
-    choice = input("\nEnter your choice (1-4): ")
-    return choice
-
-def about():
-    """Display information about the application"""
-    display_header("About This Application")
-    
-    print("\nGraphhopper Route Planner")
-    print("Team: Montemar Squad")
-    print("\nMembers:")
-    print("- John Ken Ompad - Enhanced UI with Menu System")
-    print("- Jomari G. Tero - Favorite Locations")
-    print("- Niño Angelo A. Lawan - Simple Route Visualization")
-    print("- Lance Montemar - Simple Export Directions")
-    
-    print("\nThis application uses the Graphhopper API to find routes between")
-    print("locations with enhanced features added by our team.")
-    
-    input("\nPress Enter to continue...")
-
-def main():
-    """Main application function"""
-    while True:
-        choice = display_menu()
-        
-        if choice == "1":
-            find_route()
-        elif choice == "2":
-            manage_favorites()
-        elif choice == "3":
-            about()
-        elif choice == "4" or choice.lower() in ["q", "quit"]:
-            print("\nThank you for using Graphhopper Route Planner!")
-            break
-        else:
-            print("Invalid choice. Please try again.")
-            time.sleep(1)
-
-# Update the find_route function to use the enhanced UI
-def find_route():
-    """Find a route between two locations"""
-    display_header("Find Route")
-    
-    # Rest of the function remains the same
-    # ...
 
 # Feature 2: Favorite Locations - Save and load favorites (Jomari G. Tero)
 def save_favorite(name, location_data):
@@ -178,78 +124,6 @@ def use_favorite(name):
         print(f"Favorite '{name}' not found.")
         return None
 
-def manage_favorites():
-    """Manage favorite locations"""
-    display_header("Manage Favorites")
-    
-    if not display_favorites():
-        print("No favorites found.")
-    
-    print("\nOptions:")
-    print("1. Add new favorite")
-    print("2. Return to main menu")
-    
-    option = input("\nEnter option (1-2): ")
-    if option == "1":
-        name = input("Enter name for this favorite: ")
-        location = input("Enter location: ")
-        loc_data = geocoding(location, key)
-        if loc_data[0] == 200:
-            save_favorite(name, loc_data)
-    
-    input("\nPress Enter to continue...")
-
-# Modify the find_route function to use favorites
-def find_route():
-    # ... existing code ...
-    
-    # Get starting location
-    print("\nYou can use a saved favorite by typing 'fav:name'")
-    loc1 = input("Starting Location: ")
-    if loc1 in ["quit", "q"]:
-        return
-    
-    # Check if it's a favorite
-    if loc1.startswith("fav:"):
-        fav_name = loc1[4:].strip()
-        orig = use_favorite(fav_name)
-        if not orig:
-            orig = geocoding(input("Enter the starting location: "), key)
-    else:
-        orig = geocoding(loc1, key)
-
-    # Get destination
-    print("\nYou can use a saved favorite by typing 'fav:name'")
-    loc2 = input("Destination: ")
-    if loc2 in ["quit", "q"]:
-        return
-    
-    # Check if it's a favorite
-    if loc2.startswith("fav:"):
-        fav_name = loc2[4:].strip()
-        dest = use_favorite(fav_name)
-        if not dest:
-            dest = geocoding(input("Enter the destination: "), key)
-    else:
-        dest = geocoding(loc2, key)
-    
-    # ... rest of the function ...
-    
-    # Add options after displaying route
-    print("\nOptions:")
-    print("1. Save origin to favorites")
-    print("2. Save destination to favorites")
-    # ... other options ...
-    
-    option = input("\nEnter option (1-5): ")
-    if option == "1":
-        name = input("Enter name for this favorite: ")
-        save_favorite(name, orig)
-    elif option == "2":
-        name = input("Enter name for this favorite: ")
-        save_favorite(name, dest)
-    # ... other options ...
-
 # Feature 3: Simple Route Visualization (Niño Angelo A. Lawan)
 def visualize_route(orig, dest):
     """
@@ -266,29 +140,6 @@ def visualize_route(orig, dest):
     webbrowser.open(maps_url)
     print("If the browser doesn't open automatically, use this URL:")
     print(maps_url)
-
-# Add to the find_route function
-def find_route():
-    # ... existing code ...
-    
-    # After displaying route, offer options
-    print("\nOptions:")
-    print("1. Save origin to favorites")
-    print("2. Save destination to favorites")
-    print("3. View route on map")
-    print("4. Export directions to file")
-    print("5. Return to main menu")
-    
-    option = input("\nEnter option (1-5): ")
-    if option == "1":
-        name = input("Enter name for this favorite: ")
-        save_favorite(name, orig)
-    elif option == "2":
-        name = input("Enter name for this favorite: ")
-        save_favorite(name, dest)
-    elif option == "3":
-        visualize_route(orig, dest)
-    # ... other options ...
 
 # Feature 4: Simple Export Directions (Lance Montemar)
 def export_directions(orig, dest, vehicle, paths_data):
@@ -333,54 +184,60 @@ def export_directions(orig, dest, vehicle, paths_data):
     except Exception as e:
         print(f"Error exporting directions: {e}")
 
-# Add to the find_route function
-def find_route():
-    # ... existing code ...
-    
-    # After displaying route, offer options
-    print("\nOptions:")
-    print("1. Save origin to favorites")
-    print("2. Save destination to favorites")
-    print("3. View route on map")
-    print("4. Export directions to file")
-    print("5. Return to main menu")
-    
-    option = input("\nEnter option (1-5): ")
-    if option == "1":
-        name = input("Enter name for this favorite: ")
-        save_favorite(name, orig)
-    elif option == "2":
-        name = input("Enter name for this favorite: ")
-        save_favorite(name, dest)
-    elif option == "3":
-        visualize_route(orig, dest)
-    elif option == "4":
-        export_directions(orig, dest, vehicle, paths_data)
-    # ... other options ...
+# Feature 1: Enhanced UI - Main menu function (John Ken Ompad)
+def display_menu():
+    """Display the main menu and get user choice"""
+    display_header()
+    print("\n1. Find route between locations")
+    print("2. Manage favorite locations")
+    print("3. About this application")
+    print("4. Exit")
+    print("\nEnter 'q' or 'quit' at any prompt to return to this menu.")
+    choice = input("\nEnter your choice (1-4): ")
+    return choice
 
-# Main application loop
-while True:
-    print("\n+++++++++++++++++++++++++++++++++++++++++++++")
+def find_route():
+    """Find a route between two locations"""
+    display_header("Find Route")
+    
     print("Vehicle profiles available on Graphhopper:")
-    print("+++++++++++++++++++++++++++++++++++++++++++++")
     print("car, bike, foot")
-    print("+++++++++++++++++++++++++++++++++++++++++++++")
-    vehicle = input("Enter a vehicle profile from the list above: ")
-    if vehicle == "quit" or vehicle == "q":
-        break
+    vehicle = input("\nEnter a vehicle profile from the list above: ")
+    if vehicle in ["quit", "q"]:
+        return
     elif vehicle not in ["car", "bike", "foot"]:
         vehicle = "car"
         print("No valid vehicle profile was entered. Using the car profile.")
 
+    # Get starting location
+    print("\nYou can use a saved favorite by typing 'fav:name'")
     loc1 = input("Starting Location: ")
-    if loc1 == "quit" or loc1 == "q":
-        break
-    orig = geocoding(loc1, key)
+    if loc1 in ["quit", "q"]:
+        return
+    
+    # Check if it's a favorite
+    if loc1.startswith("fav:"):
+        fav_name = loc1[4:].strip()
+        orig = use_favorite(fav_name)
+        if not orig:
+            orig = geocoding(input("Enter the starting location: "), key)
+    else:
+        orig = geocoding(loc1, key)
 
+    # Get destination
+    print("\nYou can use a saved favorite by typing 'fav:name'")
     loc2 = input("Destination: ")
-    if loc2 == "quit" or loc2 == "q":
-        break
-    dest = geocoding(loc2, key)
+    if loc2 in ["quit", "q"]:
+        return
+    
+    # Check if it's a favorite
+    if loc2.startswith("fav:"):
+        fav_name = loc2[4:].strip()
+        dest = use_favorite(fav_name)
+        if not dest:
+            dest = geocoding(input("Enter the destination: "), key)
+    else:
+        dest = geocoding(loc2, key)
 
     if orig[0] == 200 and dest[0] == 200:
         op = f"&point={orig[1]}%2C{orig[2]}"
@@ -408,7 +265,87 @@ while True:
                 distance = paths_data["paths"][0]["instructions"][each]["distance"]
                 print(f"{path} ({distance / 1000:.1f} km / {distance / 1000 / 1.61:.1f} miles)")
             print("=================================================")
+            
+            # After displaying route, offer options
+            print("\nOptions:")
+            print("1. Save origin to favorites")
+            print("2. Save destination to favorites")
+            print("3. View route on map")
+            print("4. Export directions to file")
+            print("5. Return to main menu")
+            
+            option = input("\nEnter option (1-5): ")
+            if option == "1":
+                name = input("Enter name for this favorite: ")
+                save_favorite(name, orig)
+            elif option == "2":
+                name = input("Enter name for this favorite: ")
+                save_favorite(name, dest)
+            elif option == "3":
+                visualize_route(orig, dest)
+            elif option == "4":
+                export_directions(orig, dest, vehicle, paths_data)
         else:
             print(f"Routing API Status: {paths_status}\nError message: {paths_data.get('message', 'No route found')}")
+    
+    input("\nPress Enter to continue...")
 
+def manage_favorites():
+    """Manage favorite locations"""
+    display_header("Manage Favorites")
+    
+    if not display_favorites():
+        print("No favorites found.")
+    
+    print("\nOptions:")
+    print("1. Add new favorite")
+    print("2. Return to main menu")
+    
+    option = input("\nEnter option (1-2): ")
+    if option == "1":
+        name = input("Enter name for this favorite: ")
+        location = input("Enter location: ")
+        loc_data = geocoding(location, key)
+        if loc_data[0] == 200:
+            save_favorite(name, loc_data)
+    
+    input("\nPress Enter to continue...")
 
+def about():
+    """Display information about the application"""
+    display_header("About This Application")
+    
+    print("\nGraphhopper Route Planner")
+    print("Team: Montemar Squad")
+    print("\nMembers:")
+    print("- John Ken Ompad - Enhanced UI with Menu System")
+    print("- Jomari G. Tero - Favorite Locations")
+    print("- Niño Angelo A. Lawan - Simple Route Visualization")
+    print("- Lance Montemar - Simple Export Directions")
+    
+    print("\nThis application uses the Graphhopper API to find routes between")
+    print("locations with enhanced features added by our team.")
+    
+    input("\nPress Enter to continue...")
+
+def main():
+    """Main application function"""
+    while True:
+        choice = display_menu()
+        
+        if choice == "1":
+            find_route()
+        elif choice == "2":
+            manage_favorites()
+        elif choice == "3":
+            about()
+        elif choice == "4" or choice.lower() in ["q", "quit"]:
+            print("\nThank you for using Graphhopper Route Planner!")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+            time.sleep(1)
+
+# Run the application
+if __name__ == "__main__":
+    main()
