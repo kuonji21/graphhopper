@@ -118,6 +118,137 @@ def find_route():
     # Rest of the function remains the same
     # ...
 
+# Feature 2: Favorite Locations - Save and load favorites (Jomari G. Tero)
+def save_favorite(name, location_data):
+    """
+    Save a location to favorites.txt
+    
+    Parameters:
+    name -- Name to save the location under
+    location_data -- Location data tuple (status, lat, lng, name)
+    """
+    try:
+        with open("favorites.txt", "a") as f:
+            f.write(f"{name}|{location_data[1]}|{location_data[2]}|{location_data[3]}\n")
+        print(f"Location '{name}' saved to favorites.")
+    except Exception as e:
+        print(f"Error saving favorite: {e}")
+
+def load_favorites():
+    """
+    Load all saved favorite locations
+    
+    Returns:
+    dict -- Dictionary of favorite locations or empty dict if none found
+    """
+    favorites = {}
+    if os.path.exists("favorites.txt"):
+        try:
+            with open("favorites.txt", "r") as f:
+                for line in f:
+                    if line.strip():
+                        parts = line.strip().split("|")
+                        if len(parts) == 4:
+                            name, lat, lng, loc_name = parts
+                            favorites[name] = (200, lat, lng, loc_name)
+        except Exception as e:
+            print(f"Error loading favorites: {e}")
+    return favorites
+
+def display_favorites():
+    """Display all saved favorite locations"""
+    favorites = load_favorites()
+    if not favorites:
+        print("No favorite locations saved.")
+        return False
+    
+    print("\n--- Favorite Locations ---")
+    for name, data in favorites.items():
+        print(f"{name}: {data[3]}")
+    print("-------------------------")
+    return True
+
+def use_favorite(name):
+    """Use a favorite location"""
+    favorites = load_favorites()
+    if name in favorites:
+        return favorites[name]
+    else:
+        print(f"Favorite '{name}' not found.")
+        return None
+
+def manage_favorites():
+    """Manage favorite locations"""
+    display_header("Manage Favorites")
+    
+    if not display_favorites():
+        print("No favorites found.")
+    
+    print("\nOptions:")
+    print("1. Add new favorite")
+    print("2. Return to main menu")
+    
+    option = input("\nEnter option (1-2): ")
+    if option == "1":
+        name = input("Enter name for this favorite: ")
+        location = input("Enter location: ")
+        loc_data = geocoding(location, key)
+        if loc_data[0] == 200:
+            save_favorite(name, loc_data)
+    
+    input("\nPress Enter to continue...")
+
+# Modify the find_route function to use favorites
+def find_route():
+    # ... existing code ...
+    
+    # Get starting location
+    print("\nYou can use a saved favorite by typing 'fav:name'")
+    loc1 = input("Starting Location: ")
+    if loc1 in ["quit", "q"]:
+        return
+    
+    # Check if it's a favorite
+    if loc1.startswith("fav:"):
+        fav_name = loc1[4:].strip()
+        orig = use_favorite(fav_name)
+        if not orig:
+            orig = geocoding(input("Enter the starting location: "), key)
+    else:
+        orig = geocoding(loc1, key)
+
+    # Get destination
+    print("\nYou can use a saved favorite by typing 'fav:name'")
+    loc2 = input("Destination: ")
+    if loc2 in ["quit", "q"]:
+        return
+    
+    # Check if it's a favorite
+    if loc2.startswith("fav:"):
+        fav_name = loc2[4:].strip()
+        dest = use_favorite(fav_name)
+        if not dest:
+            dest = geocoding(input("Enter the destination: "), key)
+    else:
+        dest = geocoding(loc2, key)
+    
+    # ... rest of the function ...
+    
+    # Add options after displaying route
+    print("\nOptions:")
+    print("1. Save origin to favorites")
+    print("2. Save destination to favorites")
+    # ... other options ...
+    
+    option = input("\nEnter option (1-5): ")
+    if option == "1":
+        name = input("Enter name for this favorite: ")
+        save_favorite(name, orig)
+    elif option == "2":
+        name = input("Enter name for this favorite: ")
+        save_favorite(name, dest)
+    # ... other options ...
+
 # Main application loop
 while True:
     print("\n+++++++++++++++++++++++++++++++++++++++++++++")
