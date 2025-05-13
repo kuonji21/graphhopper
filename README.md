@@ -1,6 +1,6 @@
 # Updated with CI/CD badges and docs
 # Graphhopper Route Planner
-[![CI/CD Tests](https://github.com/your-username/your-repo/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/your-username/your-repo/actions)
+[![CI/CD Tests](https://github.com/kuonji21/graphhopper/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/kuonji21/graphhopper/actions)
 
 ## Features
 - Route planning between locations
