@@ -1,1 +1,7 @@
 # Include pytest, requests-mock, etc. 
+pytest==8.0.0
+requests-mock==1.11.0
+coverage==7.4.0
+selenium==4.18.0
+flake8==7.0.0
+requests==2.31.0
